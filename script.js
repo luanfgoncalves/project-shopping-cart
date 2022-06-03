@@ -39,3 +39,5 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 };
 
 window.onload = () => { };
+
+// Pequena mudança pro Primeiro Commit - me exclua!
