@@ -15,7 +15,7 @@ describe('1 - Teste a função fetchProducts', () => {
   test('se, ao chamar a função fetchProducts com o argumento computador, a função fetch utiliza o endpoint "https://api.mercadolibre.com/sites/MLB/search?q=computador"', async () => {
     const expected = 'https://api.mercadolibre.com/sites/MLB/search?q=computador' // define o endpoint - requerimento não precisa ser assincrono
     await fetchProducts('computador') // chama a função pro fetch poder pegar
-    expect(fetch).toHaveBeenCalledWith(expected); // verificar o argumento da função
+    expect(fetch).toHaveBeenCalledWith(expected); // verificar o argumento com que a função foi chamada
   });
 
   // test('se, o retorno da função fetchProducts com o argumento computador é uma estrutura de dados igual ao objeto computadorSearch, que já está importado no arquivo.', async () => {
