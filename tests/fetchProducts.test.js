@@ -18,9 +18,10 @@ describe('1 - Teste a função fetchProducts', () => {
     expect(fetch).toHaveBeenCalledWith(expected); // verificar o argumento com que a função foi chamada
   });
 
-  // test('se, o retorno da função fetchProducts com o argumento computador é uma estrutura de dados igual ao objeto computadorSearch, que já está importado no arquivo.', async () => {
-  //   expect(fetchProducts('computador')).toBeCalled();
-  // });
+  test('se, o retorno da função fetchProducts com o argumento computador é uma estrutura de dados igual ao objeto computadorSearch, que já está importado no arquivo.', async () => {
+    await fetchProducts('computador') // chama a função pro fetch poder pegar
+    expect(fetch).toStrictlyEqual(computadorSearch); // verificar o retorno de fetch é exatamente igual 'computadorSearch'
+  });
 
   test('se, ao chamar a função fetchProducts sem argumento, retorna um erro com a mensagem: You must provide an url.', (done) => {
     const expectedError = new Error("You must provide an url"); // define o erro
@@ -35,5 +36,3 @@ describe('1 - Teste a função fetchProducts', () => {
     }
   });
 });
-
-// Referências: 
