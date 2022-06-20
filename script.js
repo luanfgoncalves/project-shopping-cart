@@ -40,4 +40,4 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 
 window.onload = () => { };
 
-// Pequena mudança pro Primeiro Commit - me exclua!
+// Pequena mudança para teste de push - me exclua!
