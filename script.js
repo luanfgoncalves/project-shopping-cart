@@ -54,7 +54,13 @@ const productGenerator = async () => {
   });
 };
 
-// Gerador de itens do carrinho: Basicamente o productGenerator modificado p/ usar 
+// Gerador de itens do carrinho: Basicamente o productGenerator modificado p/ usar
+const itemGenerator = async (element) => {
+  const cartItems = document.getElementsByClassName('cart__items')[0];
+  const data = await fetchItem(element); // constante com dados retornados de fetch items
+  const { id, title, price } = data;// desestrutura os elementos 
+  cartItems.appendChild(createCartItemElement({ sku: id, name: title, salePrice: price }));
+};
 
 window.onload = () => { 
   productGenerator();
@@ -65,3 +71,5 @@ window.onload = () => {
 // 1 - Criar função que recupera os produtos da API e cria um display pra elas. (productGenerator) - OK?
 // 2 - Criar função que recupere os dados do produto ao clicar(evtListener) em Adicionar ao carrinho, e crie uma copia dentro da sessão Cart.
 // 3 - Lorem Ipsum
+
+// cartItemClickListener usa getSkuFromProductItem no item clicado, o dado recuperado é usado por fetchItem para pegar os dados do produto na API e adicionar ele ao carrinho
