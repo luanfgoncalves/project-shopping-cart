@@ -38,6 +38,30 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
-window.onload = () => { };
+// ---------------------- Meu Código ----------------------
 
-// Pequena mudança para teste de push - me exclua!
+// Gerador de Produtos: Através de um laço usa createProductItemElement para gerar os produtos a partir do retorno de fetchProducts
+const productGenerator = async () => {
+  const productContainer = document.getElementsByClassName('items')[0];// recupera a sessão items dentro de Containers, onde vão os produtos.
+  const data = await fetchProducts('computador');// constante com os dados de computadores da API
+  data.results.forEach((element) => { // loop que passa por todos elementos de data
+    const { title, id, thumbnail } = element;// cria constantes para os elementos usados dentro de data
+    productContainer.appendChild(createProductItemElement({ 
+      sku: id, 
+      name: title, 
+      image: thumbnail,
+    }));// usa createProducts para adicionar produtos em Itens dentro do HTML
+  });
+};
+
+// Gerador de itens do carrinho: Basicamente o productGenerator modificado p/ usar 
+
+window.onload = () => { 
+  productGenerator();
+};
+
+// Lógica e Organização
+// 0 - fetchProducts e fetchItems funcionam - OK
+// 1 - Criar função que recupera os produtos da API e cria um display pra elas. (productGenerator) - OK?
+// 2 - Criar função que recupere os dados do produto ao clicar(evtListener) em Adicionar ao carrinho, e crie uma copia dentro da sessão Cart.
+// 3 - Lorem Ipsum
