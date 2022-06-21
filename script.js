@@ -27,7 +27,7 @@ const createProductItemElement = ({ sku, name, image }) => { // Cria a sessão d
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText; // recupera o inner Text do produto na loja a partir do sku
 
-const cartItemClickListener = (event) => {
+const cartItemClickListener = async (event) => {
   // coloque seu código aqui
 };
 
@@ -67,10 +67,18 @@ const itemGenerator = async (element) => {
   }));
 };
 
-// 
+const shopItemClickListener = async (event) => {
+  if (event.target.className === 'item__add') {
+    const productId = getSkuFromProductItem(event.target.parentElement);
+    console.log(productId);
+    return itemGenerator(productId);
+  }
+};
 
 window.onload = () => { 
   productGenerator();
+  // document.addEventListener('click', cartItemClickListener);
+  document.addEventListener('click', shopItemClickListener);
 };
 
 // Lógica e Organização
