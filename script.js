@@ -27,7 +27,7 @@ const createProductItemElement = ({ sku, name, image }) => { // Cria a sessão d
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText; // recupera o inner Text do produto na loja a partir do sku
 
-const cartItemClickListener = (event) => { // Remove os itens da lista no carrinho de compras
+const cartItemClickListener = (event) => { // CORRIGIR Remove os itens da lista no carrinho de compras
   event.target.remove();
 };
 
@@ -40,6 +40,8 @@ const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens d
 };
 
 // ---------------------- Meu Código ----------------------
+
+// Insere a mensagem de carregamento ao iniciar a página
 
 // Gerador de Produtos: Através de um laço usa createProductItemElement para gerar os produtos a partir do retorno de fetchProducts
 const productGenerator = async () => {
@@ -67,18 +69,36 @@ const itemGenerator = async (element) => {
   }));
 };
 
+// Adicionador de itens ao carrinho
 const shopItemClickListener = async (event) => {
   if (event.target.className === 'item__add') {
     const productId = getSkuFromProductItem(event.target.parentElement);
-    console.log(productId);
+    // console.log(productId);
     return itemGenerator(productId);
   }
 };
+
+// Limpa o carrinho de compra
+const cartCleanerClickListener = (event) => {
+  const cartItemList = document.getElementsByClassName('cart__items')[0];
+  if (event.target.className === 'empty-cart') {
+    // console.log('fui clicado');
+    cartItemList.innerText = '';
+  }
+};
+
+// inicia o código da página
+// const start = () => {
+//   productGenerator();
+//   document.addEventListener('click', cartItemClickListener);
+//   document.addEventListener('click', shopItemClickListener);
+// };
 
 window.onload = () => { 
   productGenerator();
   // document.addEventListener('click', cartItemClickListener);
   document.addEventListener('click', shopItemClickListener);
+  document.addEventListener('click', cartCleanerClickListener);
 };
 
 // Lógica e Organização
