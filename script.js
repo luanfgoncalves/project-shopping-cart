@@ -27,8 +27,8 @@ const createProductItemElement = ({ sku, name, image }) => { // Cria a sessão d
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText; // recupera o inner Text do produto na loja a partir do sku
 
-const cartItemClickListener = async (event) => {
-  // coloque seu código aqui
+const cartItemClickListener = (event) => { // Remove os itens da lista no carrinho de compras
+  event.target.remove();
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens dentro do carrinho
@@ -85,6 +85,6 @@ window.onload = () => {
 // 0 - fetchProducts e fetchItems funcionam - OK
 // 1 - Criar função que recupera os produtos da API e cria um display pra elas. (productGenerator) - OK?
 // 2 - Criar função que recupere os dados do produto ao clicar(evtListener) em Adicionar ao carrinho, e crie uma copia dentro da sessão Cart.
-// 3 - adiciona eventLisners para os botões dos itens no shopping - PAREIAQUI
-// - MUDAR ORDEM DAS FUNÇÕES
+// 3 - adiciona eventLisners para os botões dos itens no shopping(shopItemClickListener)
+// 4 - 
 // cartItemClickListener usa getSkuFromProductItem no item clicado, o dado recuperado é usado por fetchItem para pegar os dados do produto na API e adicionar ele ao carrinho
