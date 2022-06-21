@@ -1,18 +1,18 @@
-const createProductImageElement = (imageSource) => {
+const createProductImageElement = (imageSource) => { // Gera a imagem do produto
   const img = document.createElement('img');
   img.className = 'item__image';
   img.src = imageSource;
   return img;
 };
 
-const createCustomElement = (element, className, innerText) => {
+const createCustomElement = (element, className, innerText) => { // Gera um objeto contendo nome da classe e inner text a partir dos dados da API
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
   return e;
 };
 
-const createProductItemElement = ({ sku, name, image }) => {
+const createProductItemElement = ({ sku, name, image }) => { // Cria a sessão dos produtos a partir da createCustomElement
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -20,17 +20,18 @@ const createProductItemElement = ({ sku, name, image }) => {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  // button.addEventListener('click', () => { itemGenerator(sku); });
 
   return section;
 };
 
-const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
+const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText; // recupera o inner Text do produto na loja a partir do sku
 
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
 };
 
-const createCartItemElement = ({ sku, name, salePrice }) => {
+const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens dentro do carrinho
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
@@ -59,8 +60,14 @@ const itemGenerator = async (element) => {
   const cartItems = document.getElementsByClassName('cart__items')[0];
   const data = await fetchItem(element); // constante com dados retornados de fetch items
   const { id, title, price } = data;// desestrutura os elementos 
-  cartItems.appendChild(createCartItemElement({ sku: id, name: title, salePrice: price }));
+  cartItems.appendChild(createCartItemElement({ 
+    sku: id,
+    name: title,
+    salePrice: price,
+  }));
 };
+
+// 
 
 window.onload = () => { 
   productGenerator();
@@ -70,6 +77,6 @@ window.onload = () => {
 // 0 - fetchProducts e fetchItems funcionam - OK
 // 1 - Criar função que recupera os produtos da API e cria um display pra elas. (productGenerator) - OK?
 // 2 - Criar função que recupere os dados do produto ao clicar(evtListener) em Adicionar ao carrinho, e crie uma copia dentro da sessão Cart.
-// 3 - Lorem Ipsum
-
+// 3 - adiciona eventLisners para os botões dos itens no shopping - PAREIAQUI
+// - MUDAR ORDEM DAS FUNÇÕES
 // cartItemClickListener usa getSkuFromProductItem no item clicado, o dado recuperado é usado por fetchItem para pegar os dados do produto na API e adicionar ele ao carrinho
