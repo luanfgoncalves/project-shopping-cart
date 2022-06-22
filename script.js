@@ -4,7 +4,7 @@ const createProductImageElement = (imageSource) => { // Gera a imagem do produto
   img.src = imageSource;
   return img;
 };
-
+// usar pro loading ?
 const createCustomElement = (element, className, innerText) => { // Gera um objeto contendo nome da classe e inner text a partir dos dados da API
   const e = document.createElement(element);
   e.className = className;
@@ -46,7 +46,9 @@ const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens d
 // Gerador de Produtos: Através de um laço usa createProductItemElement para gerar os produtos a partir do retorno de fetchProducts
 const productGenerator = async () => {
   const productContainer = document.getElementsByClassName('items')[0];// recupera a sessão items dentro de Containers, onde vão os produtos.
+  productContainer.appendChild(createCustomElement('div', 'loading', 'carregando...')); // tem que ficar antes do fetch
   const data = await fetchProducts('computador');// constante com os dados de computadores da API
+  document.getElementsByClassName('loading')[0].remove(); // remove o elemento com a classe loading
   data.results.forEach((element) => { // loop que passa por todos elementos de data
     const { title, id, thumbnail } = element;// cria constantes para os elementos usados dentro de data
     productContainer.appendChild(createProductItemElement({ 
@@ -108,3 +110,5 @@ window.onload = () => {
 // 3 - adiciona eventLisners para os botões dos itens no shopping(shopItemClickListener)
 // 4 - 
 // cartItemClickListener usa getSkuFromProductItem no item clicado, o dado recuperado é usado por fetchItem para pegar os dados do produto na API e adicionar ele ao carrinho
+
+// Referencias: https://www.w3schools.com/jsref/met_element_remove.asp
