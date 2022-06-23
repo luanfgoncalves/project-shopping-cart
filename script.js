@@ -29,20 +29,20 @@ const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').inn
 
 // ---------------------- Meu Código ----------------------
 // Salva itens no local storage
-const localStorageSaver = () => {
-  const cartItemList = document.getElementsByClassName('cart__items')[0];
-  // const savedDataString = JSON.stringify(cartItemList.innerHTML);
-  saveCartItems(cartItemList.innerHTML);
-  // const cartItemList = document.querySelector('.cart__items');
-  // cartItemList.appendChild(createCartItemElement(element));
-  // saveCartItems(cartItemList);
-};
+// const localStorageSaver = () => {
+//   // const cartItemList = document.getElementsByClassName('cart__items')[0];
+//   // saveCartItems(cartItemList.innerHTML);
+//   // saveCartItems(cartItemList);
+//   const cartItemList = document.querySelector('.cart__items');
+//   const savedDataString = JSON.stringify(cartItemList.innerHTML);
+//   saveCartItems(savedDataString);
+// };
 // -------------------------- FIM -------------------------
 
 const cartItemClickListener = (event) => { // CORRIGIR Remove os itens da lista no carrinho de compras
   if (event.target.className === 'item__add') {
-    saveCartItems(event.target.parentElement);
-    localStorageSaver();
+    // saveCartItems(event.target.parentElement);
+    // localStorageSaver();
     // event.target.remove();
   }
 };
@@ -52,6 +52,12 @@ const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens d
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
+  
+  const cartItemList = document.querySelector('.cart__items'); // Eu coloquei aqui
+  saveCartItems(cartItemList); // Eu coloquei aqui
+  // const savedDataString = JSON.stringify(cartItemList.innerHTML);
+  // saveCartItems(savedDataString);
+
   return li;
 };
 
@@ -103,14 +109,16 @@ const cartCleanerClickListener = (event) => {
     // console.log('fui clicado');
     cartItemList.innerText = '';
   }
+  localStorage.clear(); // limpa o localstorage
 };
 
 // recupera itens do local storage
 const localStorageGetter = () => {
-  const cartItemList = document.getElementsByClassName('cart__items')[0];
-  if (store.get('chave')) {
-      // cartItemList.innerHTML = JSON.parse(getSavedCartItems());
-  cartItemList.innerHTML = getSavedCartItems();
+  const cartItemList = document.querySelector('.cart__items');
+  // const localStorageItems = JSON.parse(getSavedCartItems());
+  if (getSavedCartItems() !== null) {
+    // cartItemList.innerHTML = JSON.parse(getSavedCartItems());
+    cartItemList.innerHTML = getSavedCartItems();
  }
 };
 
@@ -136,11 +144,11 @@ const localStorageGetter = () => {
 // };
 
 window.onload = async () => { 
-  productGenerator();
+  await productGenerator();
+  await localStorageGetter();
   document.addEventListener('click', cartItemClickListener);
   document.addEventListener('click', shopItemClickListener);
   document.addEventListener('click', cartCleanerClickListener);
-  localStorageGetter();
 };
 
 // Lógica e Organização
