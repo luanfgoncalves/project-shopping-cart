@@ -26,14 +26,6 @@ const createProductItemElement = ({ sku, name, image }) => { // Cria a sessão d
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText; // recupera o inner Text do produto na loja a partir do sku
 
-const cartItemClickListener = (event) => { // CORRIGIR Remove os itens da lista no carrinho de compras
-  if (event.target.className === 'item__add') {
-    // localStorageSaver();
-    // event.target.remove(); // causa erro pq é executado antes do gerador de itens no carrinho
-    console.log('não soube o que fazer com essa função, então esse bug virou um easterEgg');
-  }
-};
-
 const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens dentro do carrinho
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -90,12 +82,19 @@ const shopItemClickListener = async (event) => {
   localStorageSaver(); // tem que estar aqui para fazer a adição de multiplos itens
 };
 
+const cartItemClickListener = (event) => { // Remove os itens da lista no carrinho de compras - Função da trybe, retirei do lugar
+  if (event.target.className === 'cart__item') {
+    event.target.remove(); // remove os itens do carrinho
+    localStorageSaver(); // salva os itens da lista quando um for removido
+  }
+};
+
 // Limpa o carrinho de compra
-const cartCleanerClickListener = (event) => {
+const cartCleanerClickListener = async (event) => {
   const cartItemList = document.getElementsByClassName('cart__items')[0];
   if (event.target.className === 'empty-cart') {
-    cartItemList.innerText = '';
     localStorage.clear(); // limpa o localstorage
+    cartItemList.innerText = '';
   }
 };
 
