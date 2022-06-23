@@ -30,7 +30,7 @@ const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens d
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
+  // li.addEventListener('click', cartItemClickListener); não é mais necessario, nunca foi na real, só passou batido por 78346783 commits
 
   return li;
 };
@@ -89,12 +89,23 @@ const cartItemClickListener = (event) => { // Remove os itens da lista no carrin
   }
 };
 
+// regenerador de botões
+const buttonRegenerator = () => {
+  const displayItems = document.querySelectorAll('.item');
+  displayItems.forEach((element) => {
+    if (element.childElementCount < 4) {
+      element.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+    }
+  });
+};
+
 // Limpa o carrinho de compra
 const cartCleanerClickListener = async (event) => {
   const cartItemList = document.getElementsByClassName('cart__items')[0];
   if (event.target.className === 'empty-cart') {
     localStorage.clear(); // limpa o localstorage
     cartItemList.innerText = '';
+    buttonRegenerator();
   }
 };
 
@@ -115,6 +126,7 @@ const localStorageGetter = () => {
 //   });
 // };
 
+// Gera eventListeners para as funções dependentes de cliques
 const eventListenerGenerator = () => {
   document.addEventListener('click', cartItemClickListener);
   document.addEventListener('click', shopItemClickListener);
@@ -135,3 +147,4 @@ window.onload = () => {
 // Referencias: 
 // https://www.w3schools.com/jsref/met_element_remove.asp
 // https://reactgo.com/check-local-storage-key-exists-js/
+// https://www.w3schools.com/jsref/prop_element_childelementcount.asp
