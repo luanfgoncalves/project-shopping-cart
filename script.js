@@ -37,10 +37,35 @@ const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens d
 
 // ---------------------- Meu Código ----------------------
 
+// gerador de sessão para a calculadora de preços
+const calculatorGenerator = () => {
+  const calculatorSection = document.getElementsByClassName('cart')[0];
+  calculatorSection.appendChild(createCustomElement('div', 'total-price', '0'));
+};
+
+// função auxiliar de priceManager
+const CartItemsListFunction = () => {
+  const cartItems = document.querySelectorAll('.cart__item');
+  return cartItems;
+};
+
+// Calculadora de preços - adicionar change na li
+const priceManager = () => {
+  const price = document.querySelector('.total-price');
+  let cartItemsCost = 0; // valor inicial de custo dos produtos no carrinho
+  const cartItems = CartItemsListFunction();
+  cartItems.forEach((element) => {
+    const refinedData = element.innerHTML.split('$'); // remove o cifrão do valor deixando apenas o numero
+    cartItemsCost += parseFloat(refinedData[1]); // retorna o primeiro numero contido numa string
+  });
+  price.innerText = cartItemsCost;
+};
+
 // Salva itens no local storage
 const localStorageSaver = () => {
   const cartItemList = document.getElementsByClassName('cart__items')[0];
   saveCartItems(cartItemList.innerHTML);
+  priceManager();
 };
 
 // Gerador de Produtos: Através de um laço usa createProductItemElement para gerar os produtos a partir do retorno de fetchProducts
@@ -89,15 +114,15 @@ const cartItemClickListener = (event) => { // Remove os itens da lista no carrin
   }
 };
 
-// Regenera os botões dos produtos ao limpar o carrinho
-const buttonRegenerator = () => {
-  const displayItems = document.querySelectorAll('.item');
-  displayItems.forEach((element) => {
-    if (element.childElementCount < 4) {
-      element.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-    }
-  });
-};
+// Regenera os botões dos produtos ao limpar o carrinho - funciona mas não passa no cypress :/ 
+// const buttonRegenerator = () => {
+//   const displayItems = document.querySelectorAll('.item');
+//   displayItems.forEach((element) => {
+//     if (element.childElementCount < 4) {
+//       element.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+//     }
+//   });
+// };
 
 // Limpa o carrinho de compra
 const cartCleanerClickListener = async (event) => {
@@ -105,7 +130,7 @@ const cartCleanerClickListener = async (event) => {
   if (event.target.className === 'empty-cart') {
     localStorage.clear(); // limpa o localstorage
     cartItemList.innerText = '';
-    buttonRegenerator();
+    // buttonRegenerator(); funciona mas não passa no cypress
   }
 };
 
@@ -116,15 +141,6 @@ const localStorageGetter = () => {
     cartItemList.innerHTML = getSavedCartItems();
  }
 };
-
-// Calculadora de preços
-// const priceManager = () => {
-//   let cartItemsCost = 0; // valor inicial de custo dos produtos no carrinho
-//   const cartItemList = document.getElementsByClassName('cart__items')[0];
-//   cartItemList.forEach((element) => {
-//     cartItemsCost
-//   });
-// };
 
 // Gera eventListeners para as funções dependentes de cliques
 const eventListenerGenerator = () => {
@@ -138,13 +154,17 @@ const start = async () => {
   await productGenerator();
   await localStorageGetter();
   eventListenerGenerator();
+  calculatorGenerator();
 };
 
 window.onload = () => { 
   start();
 };
 
+// Nota: botar evnt listener para mudanças na lista de compras evocarem localStorageSaver e calculadora de preços.
+
 // Referencias: 
 // https://www.w3schools.com/jsref/met_element_remove.asp
 // https://reactgo.com/check-local-storage-key-exists-js/
 // https://www.w3schools.com/jsref/prop_element_childelementcount.asp
+// https://www.w3schools.com/jsref/jsref_parsefloat.asp
