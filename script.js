@@ -153,8 +153,8 @@ const eventListenerGenerator = () => {
 const start = async () => {
   await productGenerator();
   await localStorageGetter();
+  await calculatorGenerator();
   eventListenerGenerator();
-  calculatorGenerator();
 };
 
 window.onload = () => { 
