@@ -4,7 +4,7 @@ const createProductImageElement = (imageSource) => { // Gera a imagem do produto
   img.src = imageSource;
   return img;
 };
-// usar pro loading ?
+
 const createCustomElement = (element, className, innerText) => { // Gera um objeto contendo nome da classe e inner text a partir dos dados da API
   const e = document.createElement(element);
   e.className = className;
@@ -20,30 +20,17 @@ const createProductItemElement = ({ sku, name, image }) => { // Cria a sessão d
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-  // button.addEventListener('click', () => { itemGenerator(sku); });
 
   return section;
 };
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText; // recupera o inner Text do produto na loja a partir do sku
 
-// ---------------------- Meu Código ----------------------
-// Salva itens no local storage
-// const localStorageSaver = () => {
-//   // const cartItemList = document.getElementsByClassName('cart__items')[0];
-//   // saveCartItems(cartItemList.innerHTML);
-//   // saveCartItems(cartItemList);
-//   const cartItemList = document.querySelector('.cart__items');
-//   const savedDataString = JSON.stringify(cartItemList.innerHTML);
-//   saveCartItems(savedDataString);
-// };
-// -------------------------- FIM -------------------------
-
 const cartItemClickListener = (event) => { // CORRIGIR Remove os itens da lista no carrinho de compras
   if (event.target.className === 'item__add') {
-    // saveCartItems(event.target.parentElement);
     // localStorageSaver();
-    // event.target.remove();
+    // event.target.remove(); // causa erro pq é executado antes do gerador de itens no carrinho
+    console.log('não soube o que fazer com essa função, então esse bug virou um easterEgg');
   }
 };
 
@@ -52,18 +39,17 @@ const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens d
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
-  
-  const cartItemList = document.querySelector('.cart__items'); // Eu coloquei aqui
-  saveCartItems(cartItemList); // Eu coloquei aqui
-  // const savedDataString = JSON.stringify(cartItemList.innerHTML);
-  // saveCartItems(savedDataString);
 
   return li;
 };
 
 // ---------------------- Meu Código ----------------------
 
-// Insere a mensagem de carregamento ao iniciar a página
+// Salva itens no local storage
+const localStorageSaver = () => {
+  const cartItemList = document.getElementsByClassName('cart__items')[0];
+  saveCartItems(cartItemList.innerHTML);
+};
 
 // Gerador de Produtos: Através de um laço usa createProductItemElement para gerar os produtos a partir do retorno de fetchProducts
 const productGenerator = async () => {
@@ -91,22 +77,23 @@ const itemGenerator = async (element) => {
     name: title,
     salePrice: price,
   }));
+  localStorageSaver(); // ??? LEMBRAR aeeeeeee poha, funcionou !!!
 };
 
 // Adicionador de itens ao carrinho
 const shopItemClickListener = async (event) => {
   if (event.target.className === 'item__add') {
     const productId = getSkuFromProductItem(event.target.parentElement);
-    // console.log(productId);
+    event.target.remove(); 
     return itemGenerator(productId);
   }
+  localStorageSaver(); // tem que estar aqui para fazer a adição de multiplos itens
 };
 
 // Limpa o carrinho de compra
 const cartCleanerClickListener = (event) => {
   const cartItemList = document.getElementsByClassName('cart__items')[0];
   if (event.target.className === 'empty-cart') {
-    // console.log('fui clicado');
     cartItemList.innerText = '';
   }
   localStorage.clear(); // limpa o localstorage
@@ -115,9 +102,7 @@ const cartCleanerClickListener = (event) => {
 // recupera itens do local storage
 const localStorageGetter = () => {
   const cartItemList = document.querySelector('.cart__items');
-  // const localStorageItems = JSON.parse(getSavedCartItems());
   if (getSavedCartItems() !== null) {
-    // cartItemList.innerHTML = JSON.parse(getSavedCartItems());
     cartItemList.innerHTML = getSavedCartItems();
  }
 };
@@ -131,34 +116,23 @@ const localStorageGetter = () => {
 //   });
 // };
 
-// const eventListenerGenerator = () => {
-//   document.addEventListener('click', cartItemClickListener);
-//   document.addEventListener('click', shopItemClickListener);
-//   document.addEventListener('click', cartCleanerClickListener);
-// };
-
-// inicia o código da página
-// const start = () => {
-//   productGenerator();
-//   eventListenerGenerator();
-// };
-
-window.onload = async () => { 
-  await productGenerator();
-  await localStorageGetter();
+const eventListenerGenerator = () => {
   document.addEventListener('click', cartItemClickListener);
   document.addEventListener('click', shopItemClickListener);
   document.addEventListener('click', cartCleanerClickListener);
 };
 
-// Lógica e Organização
-// 0 - fetchProducts e fetchItems funcionam - OK
-// 1 - Criar função que recupera os produtos da API e cria um display pra elas. (productGenerator) - OK?
-// 2 - Criar função que recupere os dados do produto ao clicar(evtListener) em Adicionar ao carrinho, e crie uma copia dentro da sessão Cart.
-// 3 - adiciona eventLisners para os botões dos itens no shopping(shopItemClickListener)
-// 4 - 
-// cartItemClickListener usa getSkuFromProductItem no item clicado, o dado recuperado é usado por fetchItem para pegar os dados do produto na API e adicionar ele ao carrinho
+// inicia o código da página
+const start = async () => {
+  await productGenerator();
+  await localStorageGetter();
+  eventListenerGenerator();
+};
+
+window.onload = () => { 
+  start();
+};
 
 // Referencias: 
 // https://www.w3schools.com/jsref/met_element_remove.asp
-// https://pt.stackoverflow.com/questions/135990/como-verificar-se-existe-um-dado-no-storage#:~:text=store%23get()%20retorna%20o,chave%27))%7B%20%2F%2F%20Existe.%20%7D
+// https://reactgo.com/check-local-storage-key-exists-js/
