@@ -84,7 +84,7 @@ const itemGenerator = async (element) => {
 const shopItemClickListener = async (event) => {
   if (event.target.className === 'item__add') {
     const productId = getSkuFromProductItem(event.target.parentElement);
-    event.target.remove(); 
+    event.target.remove();
     return itemGenerator(productId);
   }
   localStorageSaver(); // tem que estar aqui para fazer a adição de multiplos itens
@@ -95,8 +95,8 @@ const cartCleanerClickListener = (event) => {
   const cartItemList = document.getElementsByClassName('cart__items')[0];
   if (event.target.className === 'empty-cart') {
     cartItemList.innerText = '';
+    localStorage.clear(); // limpa o localstorage
   }
-  localStorage.clear(); // limpa o localstorage
 };
 
 // recupera itens do local storage
