@@ -42,8 +42,8 @@ const localStorageSaver = () => {
 const cartItemClickListener = (event) => { // CORRIGIR Remove os itens da lista no carrinho de compras
   if (event.target.className === 'item__add') {
     saveCartItems(event.target.parentElement);
-    event.target.remove();
     localStorageSaver();
+    // event.target.remove();
   }
 };
 
@@ -108,9 +108,20 @@ const cartCleanerClickListener = (event) => {
 // recupera itens do local storage
 const localStorageGetter = () => {
   const cartItemList = document.getElementsByClassName('cart__items')[0];
-  // cartItemList.innerHTML = JSON.parse(getSavedCartItems());
+  if (store.get('chave')) {
+      // cartItemList.innerHTML = JSON.parse(getSavedCartItems());
   cartItemList.innerHTML = getSavedCartItems();
+ }
 };
+
+// Calculadora de preços
+// const priceManager = () => {
+//   let cartItemsCost = 0; // valor inicial de custo dos produtos no carrinho
+//   const cartItemList = document.getElementsByClassName('cart__items')[0];
+//   cartItemList.forEach((element) => {
+//     cartItemsCost
+//   });
+// };
 
 // const eventListenerGenerator = () => {
 //   document.addEventListener('click', cartItemClickListener);
@@ -126,7 +137,7 @@ const localStorageGetter = () => {
 
 window.onload = async () => { 
   productGenerator();
-  // document.addEventListener('click', cartItemClickListener);
+  document.addEventListener('click', cartItemClickListener);
   document.addEventListener('click', shopItemClickListener);
   document.addEventListener('click', cartCleanerClickListener);
   localStorageGetter();
@@ -140,4 +151,6 @@ window.onload = async () => {
 // 4 - 
 // cartItemClickListener usa getSkuFromProductItem no item clicado, o dado recuperado é usado por fetchItem para pegar os dados do produto na API e adicionar ele ao carrinho
 
-// Referencias: https://www.w3schools.com/jsref/met_element_remove.asp
+// Referencias: 
+// https://www.w3schools.com/jsref/met_element_remove.asp
+// https://pt.stackoverflow.com/questions/135990/como-verificar-se-existe-um-dado-no-storage#:~:text=store%23get()%20retorna%20o,chave%27))%7B%20%2F%2F%20Existe.%20%7D
