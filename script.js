@@ -27,8 +27,24 @@ const createProductItemElement = ({ sku, name, image }) => { // Cria a sessão d
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText; // recupera o inner Text do produto na loja a partir do sku
 
+// ---------------------- Meu Código ----------------------
+// Salva itens no local storage
+const localStorageSaver = () => {
+  const cartItemList = document.getElementsByClassName('cart__items')[0];
+  // const savedDataString = JSON.stringify(cartItemList.innerHTML);
+  saveCartItems(cartItemList.innerHTML);
+  // const cartItemList = document.querySelector('.cart__items');
+  // cartItemList.appendChild(createCartItemElement(element));
+  // saveCartItems(cartItemList);
+};
+// -------------------------- FIM -------------------------
+
 const cartItemClickListener = (event) => { // CORRIGIR Remove os itens da lista no carrinho de compras
-  event.target.remove();
+  if (event.target.className === 'item__add') {
+    saveCartItems(event.target.parentElement);
+    event.target.remove();
+    localStorageSaver();
+  }
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => { // gera os itens dentro do carrinho
@@ -89,18 +105,31 @@ const cartCleanerClickListener = (event) => {
   }
 };
 
+// recupera itens do local storage
+const localStorageGetter = () => {
+  const cartItemList = document.getElementsByClassName('cart__items')[0];
+  // cartItemList.innerHTML = JSON.parse(getSavedCartItems());
+  cartItemList.innerHTML = getSavedCartItems();
+};
+
+// const eventListenerGenerator = () => {
+//   document.addEventListener('click', cartItemClickListener);
+//   document.addEventListener('click', shopItemClickListener);
+//   document.addEventListener('click', cartCleanerClickListener);
+// };
+
 // inicia o código da página
 // const start = () => {
 //   productGenerator();
-//   document.addEventListener('click', cartItemClickListener);
-//   document.addEventListener('click', shopItemClickListener);
+//   eventListenerGenerator();
 // };
 
-window.onload = () => { 
+window.onload = async () => { 
   productGenerator();
   // document.addEventListener('click', cartItemClickListener);
   document.addEventListener('click', shopItemClickListener);
   document.addEventListener('click', cartCleanerClickListener);
+  localStorageGetter();
 };
 
 // Lógica e Organização
