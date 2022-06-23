@@ -89,7 +89,7 @@ const cartItemClickListener = (event) => { // Remove os itens da lista no carrin
   }
 };
 
-// regenerador de botões
+// Regenera os botões dos produtos ao limpar o carrinho
 const buttonRegenerator = () => {
   const displayItems = document.querySelectorAll('.item');
   displayItems.forEach((element) => {
